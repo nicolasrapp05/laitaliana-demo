@@ -222,9 +222,221 @@
     }
   }
 
+  function initMenuBoard() {
+    const board = document.querySelector("[data-menu-board]");
+    const dock = document.querySelector("[data-menu-dock]");
+    if (!board || !dock) return;
+
+    const tabs = Array.from(dock.querySelectorAll('[role="tab"]'));
+    const panels = Array.from(board.querySelectorAll("[data-menu-panel]"));
+    if (!tabs.length || !panels.length) return;
+
+    board.classList.add("is-live");
+
+    function showPanel(panel, on) {
+      panel.classList.toggle("is-on", on);
+      panel.hidden = !on;
+    }
+
+    function pinCategory(tab, panel) {
+      window.requestAnimationFrame(function () {
+        window.requestAnimationFrame(function () {
+          if (scroller && tab) {
+            const tabBox = tab.getBoundingClientRect();
+            const scrollerBox = scroller.getBoundingClientRect();
+            scroller.scrollTo({
+              left:
+                scroller.scrollLeft +
+                tabBox.left -
+                scrollerBox.left -
+                (scrollerBox.width - tabBox.width) / 2,
+              behavior: reduceMotion ? "auto" : "smooth",
+            });
+          }
+
+          const heading = panel && panel.querySelector("h2");
+          if (heading) {
+            const dockBottom = dock.getBoundingClientRect().bottom;
+            const headingTop = heading.getBoundingClientRect().top;
+            if (headingTop < dockBottom + 8) {
+              window.scrollTo({
+                top: Math.max(0, window.scrollY + headingTop - dockBottom - 10),
+                behavior: reduceMotion ? "auto" : "smooth",
+              });
+            }
+          }
+
+          syncRail();
+        });
+      });
+    }
+
+    function selectTab(tab, writeHash, pinTitle) {
+      tabs.forEach((item) => {
+        const on = item === tab;
+        item.setAttribute("aria-selected", on ? "true" : "false");
+        item.tabIndex = on ? 0 : -1;
+      });
+
+      const id = tab.getAttribute("aria-controls");
+      panels.forEach((panel) => showPanel(panel, panel.id === id));
+
+      if (writeHash && id && window.history && history.replaceState) {
+        history.replaceState(null, "", "#" + id);
+      }
+
+      if (pinTitle) {
+        pinCategory(
+          tab,
+          panels.find(function (panel) {
+            return panel.id === id;
+          })
+        );
+      }
+    }
+
+    const scroller = dock.querySelector("[data-menu-scroller]");
+    const rail = dock.querySelector("[data-menu-rail]");
+    const nextStep = dock.querySelector("[data-menu-next]");
+    let dragged = false;
+    let peekTimer = 0;
+
+    function syncRail() {
+      if (!scroller || !rail) return;
+      const max = Math.max(scroller.scrollWidth - scroller.clientWidth, 0);
+      const overflowing = max > 12;
+      rail.classList.toggle("is-overflow", overflowing);
+      rail.classList.toggle("is-start", scroller.scrollLeft <= 8);
+      rail.classList.toggle("is-end", !overflowing || scroller.scrollLeft >= max - 8);
+    }
+
+    function markRailMoved() {
+      if (rail) rail.classList.add("has-moved");
+      if (peekTimer) {
+        window.clearTimeout(peekTimer);
+        peekTimer = 0;
+      }
+    }
+
+    function stepRail(dir) {
+      if (!scroller) return;
+      const amount = Math.max(Math.round(scroller.clientWidth * 0.62), 148);
+      scroller.scrollBy({
+        left: dir * amount,
+        behavior: reduceMotion ? "auto" : "smooth",
+      });
+    }
+
+    if (scroller) {
+      let pressing = false;
+      let startX = 0;
+      let startLeft = 0;
+
+      scroller.addEventListener("pointerdown", (event) => {
+        if (event.pointerType === "mouse" && event.button !== 0) return;
+        pressing = true;
+        dragged = false;
+        startX = event.clientX;
+        startLeft = scroller.scrollLeft;
+        markRailMoved();
+      });
+
+      scroller.addEventListener("pointermove", (event) => {
+        if (!pressing) return;
+        const dx = event.clientX - startX;
+        if (!dragged && Math.abs(dx) > 8) {
+          dragged = true;
+          scroller.classList.add("is-dragging");
+          try {
+            scroller.setPointerCapture(event.pointerId);
+          } catch (err) {
+            /* capture opcional */
+          }
+        }
+        if (dragged) scroller.scrollLeft = startLeft - dx;
+      });
+
+      ["pointerup", "pointercancel"].forEach((name) => {
+        scroller.addEventListener(name, () => {
+          pressing = false;
+          scroller.classList.remove("is-dragging");
+        });
+      });
+
+      scroller.addEventListener(
+        "click",
+        (event) => {
+          if (!dragged) return;
+          event.preventDefault();
+          event.stopPropagation();
+        },
+        true
+      );
+
+      scroller.addEventListener("scroll", syncRail, { passive: true });
+      window.addEventListener("resize", syncRail);
+    }
+
+    if (nextStep) {
+      nextStep.addEventListener("click", () => {
+        markRailMoved();
+        stepRail(1);
+      });
+    }
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener("click", (event) => {
+        event.preventDefault();
+        if (dragged) return;
+        selectTab(tab, true, true);
+      });
+      tab.addEventListener("keydown", (event) => {
+        let next = index;
+        if (event.key === "ArrowRight") next = (index + 1) % tabs.length;
+        else if (event.key === "ArrowLeft") next = (index - 1 + tabs.length) % tabs.length;
+        else if (event.key === "Home") next = 0;
+        else if (event.key === "End") next = tabs.length - 1;
+        else return;
+        event.preventDefault();
+        tabs[next].focus();
+        selectTab(tabs[next], true, true);
+      });
+    });
+
+    window.addEventListener("hashchange", () => {
+      const id = (location.hash || "").replace("#", "");
+      const tab = tabs.find((item) => item.getAttribute("aria-controls") === id);
+      if (tab) selectTab(tab, false, true);
+    });
+
+    const fromHash = tabs.find((tab) => tab.getAttribute("aria-controls") === (location.hash || "").replace("#", ""));
+    selectTab(fromHash || tabs[0], false);
+
+    window.requestAnimationFrame(function () {
+      window.requestAnimationFrame(function () {
+        syncRail();
+        if (fromHash && scroller) {
+          fromHash.scrollIntoView({ inline: "center", block: "nearest", behavior: "auto" });
+          syncRail();
+          return;
+        }
+        if (reduceMotion || !scroller || !rail || !rail.classList.contains("is-overflow")) return;
+        const start = scroller.scrollLeft;
+        scroller.scrollTo({ left: start + 56, behavior: "smooth" });
+        peekTimer = window.setTimeout(function () {
+          scroller.scrollTo({ left: start, behavior: "smooth" });
+          peekTimer = 0;
+        }, 700);
+      });
+    });
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(syncRail);
+    }
+  }
+
   function initReveal() {
     const targets = document.querySelectorAll(
-      ".pedido, .dia, .pillar, .cardapio, .quotes blockquote, .casa-copy, .faq-list, .onde-card, .close-inner, .proof"
+      ".pedido, .dia, .pillar, .cardapio, .quotes blockquote, .casa-copy, .faq-list, .onde-card, .close-inner, .menu-intro, .menu-dia, .menu-dock, .menu-board"
     );
     if (reduceMotion) return;
     targets.forEach((el) => el.classList.add("reveal"));
@@ -242,10 +454,30 @@
     targets.forEach((el) => io.observe(el));
   }
 
+  function syncHeaderHeight() {
+    const header = document.querySelector(".site-header");
+    if (!header) return;
+    const height = Math.round(header.getBoundingClientRect().height);
+    if (height > 0) {
+      root.style.setProperty("--header-h", height + "px");
+    }
+  }
+
   loadGtag();
   applyPhones();
   initTracking();
   initMenu();
   initTheme();
+  initMenuBoard();
   initReveal();
+  syncHeaderHeight();
+  const header = document.querySelector(".site-header");
+  if (header && typeof ResizeObserver !== "undefined") {
+    new ResizeObserver(syncHeaderHeight).observe(header);
+  } else {
+    window.addEventListener("resize", syncHeaderHeight, { passive: true });
+  }
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(syncHeaderHeight);
+  }
 })();
