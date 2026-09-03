@@ -40,6 +40,7 @@
     <link rel="apple-touch-icon" href="assets/images/apple-touch.png" />
     <link rel="preload" href="assets/fonts/font-7.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="assets/fonts/font-11.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="assets/images/hero-fundo.webp" as="image" type="image/webp" />
     <link rel="preload" href="assets/images/prato-lasanha.webp" as="image" type="image/webp" />
     <link rel="stylesheet" href="css/style.css" />
 
@@ -99,7 +100,7 @@
         ],
         "hasMenu": {
           "@type": "Menu",
-          "url": "https://www.laitaliana.com.br/#cardapio",
+          "url": "https://www.laitaliana.com.br/cardapio.html",
           "name": "Cardápio"
         },
         "hasMap": "https://www.google.com/maps/search/La+Italiana+Rotisseria/@-25.4475488,-49.3091271,17z",
@@ -277,7 +278,7 @@
         <nav class="nav-desktop" aria-label="Seções">
           <a href="#pedido">Pedido</a>
           <a href="#horario">Horário</a>
-          <a href="#cardapio">Cardápio</a>
+          <a href="cardapio.html">Cardápio</a>
           <a href="#avaliacoes">Avaliações</a>
           <a href="#onde">Mapa</a>
         </nav>
@@ -335,7 +336,7 @@
         <p class="sr-only" id="menu-mobile-title">Menu</p>
         <a href="#pedido">Pedido</a>
         <a href="#horario">Horário</a>
-        <a href="#cardapio">Cardápio</a>
+        <a href="cardapio.html">Cardápio</a>
         <a href="#avaliacoes">Avaliações</a>
         <a href="#onde">Mapa</a>
         <a href="https://www.facebook.com/laitalianabr" target="_blank" rel="noopener noreferrer">
@@ -355,60 +356,70 @@
 
     <main id="conteudo">
       <section class="hero" id="topo">
-        <div class="hero-copy">
-          <p class="eyebrow">Somente para levar</p>
-          <h1>Almoço e massas para levar, no Seminário, <em>desde 1990</em></h1>
-          <p class="lede">Av. Nossa Senhora Aparecida, 1147. Entrega 10h às 13h30.</p>
-          <div class="hero-cta">
-            <a class="btn btn-primary" href="tel:+554133426160" data-phone-primary data-track="tel">
-              <span data-phone-cta>Ligar (41) 3342-6160</span>
-              <span class="btn-orb" aria-hidden="true">
-                <svg class="icon" width="14" height="14" aria-hidden="true"><use href="#i-phone"></use></svg>
-              </span>
-            </a>
-            <a class="btn btn-ghost" href="#onde">Como chegar</a>
+        <div class="hero-stage" aria-hidden="true">
+          <picture>
+            <source type="image/webp" srcset="assets/images/hero-fundo.webp" />
+            <img src="assets/images/hero-fundo.jpg" alt="" width="1536" height="1024" fetchpriority="high" />
+          </picture>
+        </div>
+        <div class="hero-shade" aria-hidden="true"></div>
+        <div class="hero-inner">
+          <div class="hero-copy">
+            <p class="eyebrow">Somente para levar</p>
+            <h1>Almoço e massas para levar, no Seminário, <em>desde 1990</em></h1>
+            <p class="lede">Av. Nossa Senhora Aparecida, 1147. Entrega 10h às 13h30.</p>
+            <p class="hero-rating">
+              <!-- CLIENTE: se tiverem o Place ID do Google, troquem o href por https://search.google.com/local/reviews?placeid=SEU_PLACE_ID -->
+              <a
+                class="hero-google"
+                href="https://www.google.com/maps/search/La+Italiana+Rotisseria/@-25.4475488,-49.3091271,17z"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-track="map"
+              >
+                <strong>4,7</strong>
+                <span class="stars" aria-hidden="true">
+                  <span class="stars-base">★★★★★</span>
+                  <span class="stars-fill">★★★★★</span>
+                </span>
+                <span class="hero-google-meta">
+                  <span>no Google <span class="sr-only">(abre em nova aba)</span></span>
+                  <span>419 avaliações</span>
+                </span>
+              </a>
+            </p>
+            <div class="hero-cta">
+              <a class="btn btn-primary" href="tel:+554133426160" data-phone-primary data-track="tel">
+                <span data-phone-cta>Ligar (41) 3342-6160</span>
+                <span class="btn-orb" aria-hidden="true">
+                  <svg class="icon" width="14" height="14" aria-hidden="true"><use href="#i-phone"></use></svg>
+                </span>
+              </a>
+              <a class="btn btn-ghost" href="#onde">Como chegar</a>
+            </div>
+          </div>
+          <div class="hero-prints">
+            <figure class="hero-print is-back">
+              <picture>
+                <source type="image/webp" srcset="assets/images/prato-raviole.webp" />
+                <img src="assets/images/prato-raviole.jpg" alt="Raviole da La Italiana" width="680" height="510" />
+              </picture>
+              <figcaption>Raviole</figcaption>
+            </figure>
+            <figure class="hero-print is-front">
+              <picture>
+                <source type="image/webp" srcset="assets/images/prato-lasanha.webp" />
+                <img
+                  src="assets/images/prato-lasanha.jpg"
+                  alt="Lasanha da La Italiana"
+                  width="680"
+                  height="510"
+                />
+              </picture>
+              <figcaption>Lasanha</figcaption>
+            </figure>
           </div>
         </div>
-        <div class="hero-visual">
-          <!-- Foto da lasanha no balcão, enviada pelo cliente (Google). -->
-          <figure class="hero-photo">
-            <picture>
-              <source type="image/webp" srcset="assets/images/prato-lasanha.webp" />
-              <img
-                src="assets/images/prato-lasanha.jpg"
-                alt="Lasanha da La Italiana"
-                width="680"
-                height="510"
-                fetchpriority="high"
-              />
-            </picture>
-          </figure>
-        </div>
-      </section>
-
-      <section class="proof" aria-label="Avaliação no Google">
-        <p class="proof-score">
-          <!-- CLIENTE: se tiverem o Place ID do Google, troquem o href por https://search.google.com/local/reviews?placeid=SEU_PLACE_ID -->
-          <a
-            class="proof-google"
-            href="https://www.google.com/maps/search/La+Italiana+Rotisseria/@-25.4475488,-49.3091271,17z"
-            target="_blank"
-            rel="noopener noreferrer"
-            data-track="map"
-          >
-            <strong>4,7</strong>
-            <span class="stars" aria-hidden="true">
-              <span class="stars-base">★★★★★</span>
-              <span class="stars-fill">★★★★★</span>
-            </span>
-            <span>no Google <span class="sr-only">(abre em nova aba)</span></span>
-          </a>
-          <span class="proof-count">419 avaliações</span>
-        </p>
-        <blockquote class="proof-quote">
-          <p>Mais de 30 anos cliente. Adoro.</p>
-          <footer>Sergio Miguel, Google</footer>
-        </blockquote>
       </section>
 
       <section class="pedido" id="pedido">
@@ -546,7 +557,7 @@
 
       <section class="cardapio" id="cardapio">
         <div class="wrap">
-          <h2>Cardápio</h2>
+          <h2>Alguns pratos</h2>
           <p class="section-body">O que sai no quilo. O preço a gente fala no telefone. Consulte o que saiu hoje ligando.</p>
 
           <!-- Fotos do Google / da casa. Sem língua, rabada e dobradinha neste lote. -->
@@ -609,164 +620,8 @@
             </li>
           </ul>
 
-          <div class="cardapio-full">
-            <details open>
-              <summary>Bovino</summary>
-              <ul class="dish-grid">
-                <li>Posta Recheada</li>
-                <li>Vitelo</li>
-                <li>Rosbife</li>
-                <li>Bife à Rolê</li>
-                <li>Polpetone</li>
-                <li>Almôndegas</li>
-                <li>Carne de Panela</li>
-                <li>Charutinho de Repolho</li>
-                <li>Bife à Milanesa</li>
-                <li>Posta à Mineira</li>
-                <li>Charutinho de Couve</li>
-                <li>Tiras de Mignon c/ Legumes</li>
-                <li>Estrogonofe de Carne</li>
-                <li>Pimentão Recheado</li>
-                <li>Alcatra Acebolada</li>
-                <li>Costela Ensopada</li>
-                <li>Abobrinha Recheada</li>
-                <li>Alcatra ao Molho Madeira</li>
-                <li>Bife à Parmegiana</li>
-                <li>Brachola (Fraldinha Recheada)</li>
-                <li>Picanha ao Molho Ferrugem</li>
-                <li>Rocambole de Carne</li>
-                <li>Medalhão ao Molho Madeira</li>
-                <li>Mini Almôndegas c/ Molho</li>
-                <li>Quibe de Bandeja</li>
-                <li>Picadinho de carne</li>
-                <li>Escalope Mignon ao Molho Madeira</li>
-              </ul>
-            </details>
-            <details>
-              <summary>Frango</summary>
-              <ul class="dish-grid">
-                <li>Estrogonofe de Frango</li>
-                <li>Peito à Milanesa</li>
-                <li>Peito Recheado (presunto e mussarela)</li>
-                <li>Frango c/ Aspargos</li>
-                <li>Peito Chapeado</li>
-                <li>Sobrecoxa Recheada (farofa e passas)</li>
-                <li>Frango à Caçadora (ensopado)</li>
-                <li>Frango c/ Ervas Finas</li>
-                <li>Frango à Passarinho</li>
-                <li>Galinha Caipira</li>
-                <li>Sobrecoxa Assada</li>
-                <li>Frango à Espanhola</li>
-                <li>Frango Xadrez</li>
-                <li>Frango Desossado e Recheado</li>
-                <li>Frango c/ Catupiry</li>
-                <li>Peito ao molho Madeira</li>
-                <li>Peito à Parmegiana</li>
-              </ul>
-            </details>
-            <details>
-              <summary>Suínos</summary>
-              <ul class="dish-grid">
-                <li>Lombinho Assado</li>
-                <li>Lombo à Mineira</li>
-                <li>Bisteca Acebolada</li>
-                <li>Pernil Desossado</li>
-                <li>Pernil c/ Osso</li>
-                <li>Tender</li>
-                <li>Carré</li>
-                <li>Lombo Xadrez</li>
-                <li>Pernil de Panela (ensopado)</li>
-              </ul>
-            </details>
-            <details>
-              <summary>Frutos do mar</summary>
-              <ul class="dish-grid">
-                <li>Moqueca de Peixe</li>
-                <li>Peixe à Milanesa</li>
-                <li>Bacalhau</li>
-                <li>Bobó de Camarão</li>
-                <li>Camarão Ensopado c/ Palmito</li>
-                <li>Salmão</li>
-                <li>Risoto de Frutos do Mar</li>
-                <li>Estrogonofe de Camarão</li>
-                <li>Farofa de Camarão</li>
-                <li>Pirão de Peixe</li>
-              </ul>
-            </details>
-            <details>
-              <summary>Massas</summary>
-              <ul class="dish-grid">
-                <li>Lasanha</li>
-                <li>Canelone</li>
-                <li>Rondelli</li>
-                <li>Raviole</li>
-                <li>Capeletti</li>
-                <li>Espaguete</li>
-                <li>Talharim</li>
-                <li>Nhoque</li>
-                <li>Bugatone</li>
-              </ul>
-            </details>
-            <details>
-              <summary>Molhos</summary>
-              <ul class="dish-grid">
-                <li>Bolonhesa</li>
-                <li>Ao Sugo</li>
-                <li>4 Queijos</li>
-                <li>Carbonara</li>
-                <li>Branco</li>
-                <li>Branco c/ Brócolis</li>
-                <li>Madeira</li>
-                <li>Funghi</li>
-                <li>Funghi e Tomate Seco</li>
-                <li>Rose</li>
-                <li>À Moda</li>
-                <li>Na Manteiga</li>
-                <li>Alho e Óleo</li>
-                <li>De Frango</li>
-              </ul>
-            </details>
-            <details>
-              <summary>Guarnições</summary>
-              <ul class="dish-grid">
-                <li>Quirera Lapiana</li>
-                <li>Arroz Branco</li>
-                <li>Arroz à Grega</li>
-                <li>Arroz c/ Lentilhas</li>
-                <li>Arroz Colonial</li>
-                <li>Risoto de Frango</li>
-                <li>Risoto de Funghi</li>
-                <li>Feijão</li>
-                <li>Farofa</li>
-                <li>Banana à Milanesa</li>
-                <li>Purê de Batatas</li>
-                <li>Berinjela Romana</li>
-                <li>Polenta</li>
-                <li>Madalena</li>
-                <li>Panquecas</li>
-                <li>Suflê de Legumes</li>
-              </ul>
-            </details>
-            <details>
-              <summary>Saladas e empadão</summary>
-              <ul class="dish-grid">
-                <li>Maionese</li>
-                <li>Salpicão</li>
-                <li>Berinjela Caponata</li>
-                <li>Waldorf</li>
-                <li>Verduras e Legumes</li>
-                <li>Empadão de Palmito</li>
-                <li>Empadão de Frango</li>
-                <li>Empadão de Camarão</li>
-              </ul>
-            </details>
-          </div>
-
           <p class="menu-foot">
-            <a href="assets/images/cardapio.png">
-              Ver o cardápio em imagem
-              <svg class="icon" width="14" height="14" aria-hidden="true"><use href="#i-arrow"></use></svg>
-            </a>
+            <a class="btn btn-ghost" href="cardapio.html">Ver o cardápio completo</a>
           </p>
         </div>
       </section>
@@ -777,12 +632,16 @@
           <p class="section-body">Quem volta, fala do almoço para levar e das massas congeladas.</p>
           <div class="quote-layout">
             <blockquote>
+              <p>Mais de 30 anos cliente. Adoro.</p>
+              <footer>Sergio, Google</footer>
+            </blockquote>
+            <blockquote>
               <p>Meu lugar favorito em Curitiba para massas congeladas e comida pra levar.</p>
-              <footer>Abi Santos, Google</footer>
+              <footer>Abi, Google</footer>
             </blockquote>
             <blockquote>
               <p>Já é tradição familiar pedir no fim de semana e em dias de semana também.</p>
-              <footer>Rodrigo Asturian, Facebook</footer>
+              <footer>Rodrigo, Facebook</footer>
             </blockquote>
           </div>
         </div>
@@ -849,7 +708,7 @@
             </details>
             <details>
               <summary>Tem opção sem carne, peixe ou prato do dia?</summary>
-              <p>No cardápio há saladas, berinjela caponata, empadão de palmito, peixes e molhos como sugo, 4 queijos, funghi e alho e óleo. Pratos do dia: língua na quarta, rabada na quinta e dobradinha na sexta.</p>
+              <p>No <a href="cardapio.html">cardápio</a> há saladas, berinjela caponata, empadão de palmito, peixes e molhos como sugo, 4 queijos, funghi e alho e óleo. Pratos do dia: língua na quarta, rabada na quinta e dobradinha na sexta.</p>
             </details>
             <details>
               <summary>Fica em Santa Felicidade?</summary>
@@ -902,19 +761,6 @@
           </a>
         </div>
       </section>
-
-      <section class="close-cta" id="ligar">
-        <div class="wrap close-inner">
-          <h2>O almoço de hoje sai por telefone</h2>
-          <p>Massas, quilo e congelados. Sem mesa. A mesma casa desde 1990.</p>
-          <a class="btn btn-cream" href="tel:+554133426160" data-phone-primary data-track="tel">
-            <span data-phone-cta>Ligar (41) 3342-6160</span>
-            <span class="btn-orb" aria-hidden="true">
-              <svg class="icon" width="14" height="14" aria-hidden="true"><use href="#i-phone"></use></svg>
-            </span>
-          </a>
-        </div>
-      </section>
     </main>
 
     <footer class="site-footer">
@@ -933,6 +779,7 @@
           </p>
         </div>
         <div class="footer-links">
+          <a href="cardapio.html">Cardápio</a>
           <a href="mailto:laitaliana10@hotmail.com">laitaliana10@hotmail.com</a>
           <a href="mailto:vagas@laitaliana.com.br">vagas@laitaliana.com.br</a>
           <a href="https://www.instagram.com/laitalianabr" target="_blank" rel="noopener noreferrer">Instagram <span class="sr-only">(abre em nova aba)</span></a>
